@@ -1,2 +1,0 @@
-import { build } from '../.tools/agnes-harness/packages/cli/node_modules/esbuild/lib/main.js';
-await build({entryPoints:['scripts/agh-sdk-runner.ts'],outfile:'.tools/agnes-harness/packages/cli/dist/local/campus-runner.mjs',bundle:true,platform:'node',format:'esm',target:'node24',banner:{js:"import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);"}});
