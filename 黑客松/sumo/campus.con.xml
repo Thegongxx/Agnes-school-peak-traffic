@@ -1,0 +1,10 @@
+<connections>
+  <connection from="n_in" to="s_out" fromLane="1" toLane="1"/>
+  <connection from="s_in" to="n_out" fromLane="1" toLane="1"/>
+  <connection from="e_in" to="w_out" fromLane="1" toLane="1"/>
+  <connection from="w_in" to="e_out" fromLane="1" toLane="1"/>
+  <crossing node="J" edges="n_in n_out" width="4"/>
+  <crossing node="J" edges="s_in s_out" width="4"/>
+  <crossing node="J" edges="e_in e_out" width="4"/>
+  <crossing node="J" edges="w_in w_out" width="4"/>
+</connections>

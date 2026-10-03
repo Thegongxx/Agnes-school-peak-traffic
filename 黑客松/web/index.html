@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campus Signal Lab · 校园路口信号优化</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/"><span class="brand-icon"><i></i><i></i><i></i></span><span>SIGNAL<br><b>LAB</b></span></a>
+    <div class="nav-title">研究工作台</div>
+    <a class="nav active" href="#overview"><span>◈</span> 路口实验</a>
+    <a class="nav" href="#comparison"><span>▥</span> 方案对比</a>
+    <a class="nav" href="#trajectory"><span>⌘</span> 执行记录</a>
+    <a class="nav" href="#assumptions"><span>≡</span> 场景与约束</a>
+    <div class="sidebar-bottom"><span class="green-dot"></span> 本地仿真环境<br><small>单路口 · 合成需求 · 不连接真实灯控</small><a href="http://127.0.0.1:4177" target="_blank" rel="noopener">打开 AGH 工作台 ↗</a></div>
+  </aside>
+  <main id="overview">
+    <header><div class="breadcrumb">校园交通研究 <span>/</span> 单路口信号配时</div><div class="status-pill" id="runtime-status">检查本地环境…</div></header>
+    <section class="hero"><div><div class="eyebrow">CAMPUS TRAFFIC INTELLIGENCE</div><h1>让每一次通行，<em>少一点等待。</em></h1><p>由 AGH 组织任务，通过 SUMO 仿真比较配时，并验证每一项通行约束。</p></div><div class="hero-id">01<span>四岔路口实验</span></div></section>
+    <section class="controls"><div><label for="scenario">实验场景</label><select id="scenario" aria-label="选择实验场景"></select><span class="synthetic">合成数据</span></div><div class="control-actions"><button class="secondary" id="refresh">↻ 刷新结果</button><button class="primary" id="run">▶ 在 AGH 运行优化</button></div></section>
+    <div id="notice" class="notice" role="status">请选择场景。优化任务通过本地 AGH 会话执行，指标来自真实 SUMO 仿真。</div>
+    <section id="approval" class="panel approval" hidden aria-label="AGH 工具审批"><h2>AGH 正在等待本次工具审批</h2><p id="approval-title"></p><pre id="approval-input"></pre><div id="approval-options" class="control-actions"></div><small>仅批准这一次调用。完整审批记录随任务保存。</small></section>
+    <section class="stats" id="stats">
+      <article><span>车辆平均延误</span><div><b id="delay">—</b><small>秒 / 辆</small></div><p id="delay-change">等待仿真结果</p></article>
+      <article><span>最大排队长度</span><div><b id="queue">—</b><small>辆</small></div><p id="queue-change">四个进口的最大值</p></article>
+      <article><span>行人平均等待</span><div><b id="ped-wait">—</b><small>秒 / 人</small></div><p id="ped-change">含所有生成行人需求</p></article>
+      <article><span>高峰通过量</span><div><b id="throughput">—</b><small>辆 / 10 分钟</small></div><p id="throughput-change">仅统计需求时段内完成车辆</p></article>
+    </section>
+    <div class="workspace-grid">
+      <section class="panel simulation"><div class="panel-heading"><div><span class="section-label">SIMULATION REPLAY</span><h2>路口仿真回放</h2></div><div class="segmented"><button class="selected" data-plan="baseline">固定基线</button><button data-plan="selected">候选方案</button></div></div>
+        <div class="canvas-wrap"><canvas id="intersection" aria-label="来自 SUMO 实际轨迹的路口动画"></canvas><div class="canvas-label"><span class="green-dot"></span> SUMO 实际轨迹<span id="time-label">00:00</span></div><div class="signal-readout"><span id="phase-name">等待运行</span><b id="countdown">—<small>s</small></b></div><div class="north-arrow">N<br>↑</div><div class="map-tag">校园示意路网 · 240m 进口</div></div>
+        <div class="playback"><button id="play" class="icon-button" aria-label="播放或暂停">▶</button><input id="seek" type="range" min="0" max="0" value="0" aria-label="仿真回放进度"><select id="speed" aria-label="回放倍速"><option value="2">2×</option><option value="5" selected>5×</option><option value="10">10×</option></select><span id="replay-source">尚无轨迹</span></div>
+      </section>
+      <section class="panel trace" id="trajectory"><div class="panel-heading"><div><span class="section-label">EXECUTION RECEIPTS</span><h2>工具执行记录</h2></div><span class="tiny-pill" id="trace-count">0 步</span></div><div class="trace-source" id="trace-source">工具回执与 AGH 会话轨迹分别保存</div><div id="trace-list" class="trace-list"><div class="empty-state">运行任务后显示工具输入、结果与失败原因。<br>AGH 原生轨迹可在工作台展开查看。</div></div></section>
+    </div>
+    <section class="panel agh-session" id="agh-session" hidden><div class="panel-heading"><div><span class="section-label">AGH NATIVE SESSION</span><h2>智能体会话与校验过程</h2></div><span class="tiny-pill" id="agh-model"></span></div><p id="agh-session-id"></p><div id="agh-event-list" class="agh-events"></div><details><summary>展开模型报告</summary><pre id="agh-summary"></pre></details></section>
+    <section class="panel comparison" id="comparison"><div class="panel-heading"><div><span class="section-label">EVIDENCE & COMPARISON</span><h2>用同一份交通需求，检验配时变化。</h2></div><a class="secondary disabled" id="export" href="#">↓ 导出证据包</a></div>
+      <div class="comparison-grid"><div><div id="verdict" class="verdict">尚未完成方案验证</div><p id="verdict-detail">候选必须通过相位、绿灯、周期、行人等待、公平性和改善目标检查。</p><div class="legend"><span><i class="baseline-dot"></i>固定基线</span><span><i class="candidate-dot"></i>候选配时</span></div><div id="bar-chart" class="bars"></div></div><div><table><thead><tr><th>对比指标</th><th>固定基线</th><th>候选方案</th></tr></thead><tbody id="comparison-body"><tr><td colspan="3">等待仿真结果</td></tr></tbody></table><div id="plan-bars" class="plan-bars"></div></div></div>
+    </section>
+    <section class="panel assumptions" id="assumptions"><div class="panel-heading"><div><span class="section-label">REPRODUCIBLE BY DESIGN</span><h2>输入与项目假设</h2></div><span class="tiny-pill">非道路交通标准</span></div><div class="assumption-grid"><div><h3>合成交通需求</h3><div id="flows" class="flow-list"></div><p id="scenario-desc"></p></div><div><h3>配时约束</h3><dl id="constraints"></dl></div><div><h3>可复现记录</h3><dl id="run-meta"></dl><p>车辆仅直行；行人使用 SUMO 步行对象及独立相位。绿灯互斥，行人清空可被占用检查延长。</p></div></div></section>
+    <footer>Campus Signal Lab <span>仿真决策助手 · 所有需求均为合成数据</span><span id="updated">本地运行</span></footer>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>
